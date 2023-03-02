@@ -1,14 +1,14 @@
 import io
-import pandas as pd
-import streamlit as st
-import matplotlib.pyplot as plt
-from PIL import Image
 from io import StringIO
 
-from matplotlib.backends.backend_pdf import PdfPages
-from streamlit_authenticator import Authenticate
+import matplotlib.pyplot as plt
+import pandas as pd
+import streamlit as st
+from PIL import Image
 from googleapiclient.discovery import build
+from matplotlib.backends.backend_pdf import PdfPages
 from oauth2client.service_account import ServiceAccountCredentials
+from streamlit_authenticator import Authenticate
 
 
 def authenticate():
@@ -54,7 +54,10 @@ def add_download_image_button(fig: plt.Figure, button_text: str, filename: str, 
     )
 
 
-@st.cache_data
+number_of_seconds_to_keep = 60 * 60 * 12
+
+
+@st.cache_resource(ttl=number_of_seconds_to_keep)
 def load_google_drive_data() -> pd.DataFrame:
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
     creds = ServiceAccountCredentials.from_json_keyfile_dict({
